@@ -1,0 +1,3 @@
+package types
+
+const UNIDOC_LICENSE_API_KEY = "UNIDOC_LICENSE_API_KEY"
