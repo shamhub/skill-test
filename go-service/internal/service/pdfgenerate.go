@@ -12,10 +12,6 @@ import (
 	"github.com/unidoc/unipdf/v3/creator"
 )
 
-type Client struct {
-	creator *creator.Creator
-}
-
 type cellStyle struct {
 	ColSpan         int
 	HAlignment      creator.CellHorizontalAlignment
@@ -88,30 +84,23 @@ var cellStyles = map[string]cellStyle{
 	},
 }
 
-func GenerateStudentDataPdf(studentData dao.StudentData, fullPathName string) error {
+func NewPdfCreator() (*creator.Creator, error) {
 	conf, err := config.NewUniDocCred()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = license.SetMeteredKey(conf.Get(types.UNIDOC_LICENSE_API_KEY))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	c := creator.New()
 	c.SetPageMargins(40, 40, 0, 0)
-
-	filePath := conf.Get(types.FILE_PATH)
-	cr := &Client{creator: c}
-	err = cr.generatePdf(studentData, filePath)
-	if err != nil {
-		return err
-	}
-	return nil
+	return c, nil
 }
 
-func (c *Client) generatePdf(studentData dao.StudentData, filePath string) error {
+func (c *pdfGenerationService) generatePdf(studentData dao.StudentData) error {
 	rect := c.creator.NewRectangle(0, 0, creator.PageSizeLetter[0], 120)
 	rect.SetFillColor(creator.ColorRGBFromHex("#dde4e5"))
 	rect.SetBorderWidth(0)
@@ -139,14 +128,14 @@ func (c *Client) generatePdf(studentData dao.StudentData, filePath string) error
 		return err
 	}
 
-	err = c.creator.WriteToFile(filePath)
+	err = c.creator.WriteToFile(c.filePath)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Client) newPara(text string, textStyle creator.TextStyle) *creator.StyledParagraph {
+func (c *pdfGenerationService) newPara(text string, textStyle creator.TextStyle) *creator.StyledParagraph {
 	p := c.creator.NewStyledParagraph()
 	p.Append(text).Style = textStyle
 	p.SetEnableWrap(false)
@@ -178,7 +167,7 @@ func drawCell(table *creator.Table, content creator.VectorDrawable, cellStyle ce
 	return nil
 }
 
-func (c *Client) writeData(studentData dao.StudentData) error {
+func (c *pdfGenerationService) writeData(studentData dao.StudentData) error {
 	headerStyle := c.creator.NewTextStyle()
 	table := c.creator.NewTable(2)
 	table.SetMargins(0, 0, 50, 0)
