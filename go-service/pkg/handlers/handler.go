@@ -5,10 +5,12 @@ import (
 )
 
 type PDFHandler struct {
-	studentDataService service.GetPdfReport
+	studentDataService service.IGenerateReport
 }
 
 func NewPDfHandler() *PDFHandler {
 
-	return &PDFHandler{}
+	return &PDFHandler{
+		studentDataService: service.NewPDFGenerationService(),
+	}
 }
