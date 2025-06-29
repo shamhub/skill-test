@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 
-	errorType "github.com/shamhub/pdfprovider/error"
+	errorType "github.com/shamhub/pdfprovider/pkg/error"
 )
 
 func (h *HttpClientService) callService(ctx context.Context, method, api string,

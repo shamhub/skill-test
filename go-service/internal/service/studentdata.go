@@ -2,6 +2,6 @@ package service
 
 import "github.com/shamhub/pdfprovider/internal/dao"
 
-type StudentData struct {
-	httpClient dao.GetStudentData
+type PDFGenerationService struct {
+	studentData dao.GetStudentData
 }

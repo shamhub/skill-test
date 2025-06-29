@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/shamhub/pdfprovider/handlers"
+	"github.com/shamhub/pdfprovider/pkg/handlers"
 	"github.com/shamhub/pdfprovider/server"
 )
 

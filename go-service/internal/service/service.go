@@ -1,4 +1,4 @@
 package service
 
-type GetStudentData interface {
+type GetPdfReport interface {
 }

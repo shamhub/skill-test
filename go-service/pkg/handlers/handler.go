@@ -5,7 +5,7 @@ import (
 )
 
 type PDFHandler struct {
-	studentDataService service.GetStudentData
+	studentDataService service.GetPdfReport
 }
 
 func NewPDfHandler() *PDFHandler {
