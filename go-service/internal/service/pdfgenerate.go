@@ -100,7 +100,7 @@ func NewPdfCreator() (*creator.Creator, error) {
 	return c, nil
 }
 
-func (c *pdfGenerationService) generatePdf(studentData dao.StudentData) error {
+func (c *pdfGenerationService) GeneratePdf(studentData dao.StudentData) error {
 	rect := c.creator.NewRectangle(0, 0, creator.PageSizeLetter[0], 120)
 	rect.SetFillColor(creator.ColorRGBFromHex("#dde4e5"))
 	rect.SetBorderWidth(0)

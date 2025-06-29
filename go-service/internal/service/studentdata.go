@@ -22,10 +22,15 @@ func NewPDFGenerationService() *pdfGenerationService {
 	apiKey := unidocConfig.Get(types.UNIDOC_LICENSE_API_KEY)
 	filePath := unidocConfig.Get(types.FILE_PATH)
 
+	if apiKey == "" || filePath == "" {
+		panic("invalid config in .env")
+	}
+
 	pdfCreator, err := NewPdfCreator()
 	if err != nil {
 		panic(err)
 	}
+
 	return &pdfGenerationService{
 		dataFetcher: dao.NewDataFetcher(),
 		apiKey:      apiKey,
