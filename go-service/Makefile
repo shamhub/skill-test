@@ -3,8 +3,11 @@
 env:
 	go env -w GO111MODULE=on
 
-build: env
+buildwindows: env
 	GOOS=windows GOARCH=amd64 go build -o bin/pdfwriter cmd/pdfreport/main.go
+
+buildlinux: env
+	GOOS=linux GOARCH=amd64 go build -o bin/pdfwriter cmd/pdfreport/main.go
 
 test: env
 	go test -v -race --tags=unit -cover ./...

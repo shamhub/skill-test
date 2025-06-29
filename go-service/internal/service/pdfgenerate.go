@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/shamhub/pdfprovider/pkg/config"
 	"github.com/shamhub/pdfprovider/types"
@@ -89,7 +88,7 @@ var cellStyles = map[string]cellStyle{
 	},
 }
 
-func GenerateInvoicePdf(studentData dao.StudentData) error {
+func GenerateStudentDataPdf(studentData dao.StudentData, fullPathName string) error {
 	conf, err := config.NewUniDocCred()
 	if err != nil {
 		return err
@@ -103,15 +102,16 @@ func GenerateInvoicePdf(studentData dao.StudentData) error {
 	c := creator.New()
 	c.SetPageMargins(40, 40, 0, 0)
 
+	filePath := conf.Get(types.FILE_PATH)
 	cr := &Client{creator: c}
-	err = cr.generatePdf(studentData)
+	err = cr.generatePdf(studentData, filePath)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c *Client) generatePdf(studentData dao.StudentData) error {
+func (c *Client) generatePdf(studentData dao.StudentData, filePath string) error {
 	rect := c.creator.NewRectangle(0, 0, creator.PageSizeLetter[0], 120)
 	rect.SetFillColor(creator.ColorRGBFromHex("#dde4e5"))
 	rect.SetBorderWidth(0)
@@ -125,7 +125,7 @@ func (c *Client) generatePdf(studentData dao.StudentData) error {
 
 	table := c.creator.NewTable(1)
 	table.SetMargins(0, 0, 20, 0)
-	err = drawCell(table, c.newPara("Sample Invoice", headerStyle), cellStyles["centered"])
+	err = drawCell(table, c.newPara("Sample Data", headerStyle), cellStyles["centered"])
 	if err != nil {
 		return err
 	}
@@ -139,7 +139,7 @@ func (c *Client) generatePdf(studentData dao.StudentData) error {
 		return err
 	}
 
-	err = c.creator.WriteToFile(strings.ToLower(studentData.Name) + "_report.pdf")
+	err = c.creator.WriteToFile(filePath)
 	if err != nil {
 		return err
 	}

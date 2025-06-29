@@ -1,3 +1,4 @@
 package types
 
 const UNIDOC_LICENSE_API_KEY = "UNIDOC_LICENSE_API_KEY"
+const FILE_PATH = "FILE_PATH"
