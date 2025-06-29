@@ -2,37 +2,24 @@ package service
 
 import (
 	"github.com/shamhub/pdfprovider/internal/dao"
-	"github.com/shamhub/pdfprovider/pkg/config"
-	"github.com/shamhub/pdfprovider/types"
 	"github.com/unidoc/unipdf/v3/creator"
 )
 
 type pdfGenerationService struct {
-	dataFetcher dao.GetStudentData
+	dataFetcher *dao.DataFetcher
 	apiKey      string
 	filePath    string
 	creator     *creator.Creator
 }
 
-func NewPDFGenerationService() *pdfGenerationService {
-	unidocConfig, err := config.NewUniDocCred()
-	if err != nil {
-		panic(err)
-	}
-	apiKey := unidocConfig.Get(types.UNIDOC_LICENSE_API_KEY)
-	filePath := unidocConfig.Get(types.FILE_PATH)
-
-	if apiKey == "" || filePath == "" {
-		panic("invalid config in .env")
-	}
-
-	pdfCreator, err := NewPdfCreator()
+func NewPDFGenerationService(apiKey, filePath, backendURL, backendPort string) *pdfGenerationService {
+	pdfCreator, err := NewPdfCreator(apiKey)
 	if err != nil {
 		panic(err)
 	}
 
 	return &pdfGenerationService{
-		dataFetcher: dao.NewDataFetcher(),
+		dataFetcher: dao.NewDataFetcher(backendURL, backendPort),
 		apiKey:      apiKey,
 		filePath:    filePath,
 		creator:     pdfCreator,

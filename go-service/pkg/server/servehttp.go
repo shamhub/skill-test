@@ -8,12 +8,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type FileHandler func(context.Context) (path string, err error)
+type PdfFileHandler func(context.Context) (path string, err error)
 
-func (f FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background() // consume middleware code here
+func (f PdfFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	validateRouteVariables(vars)
+
+	studentID := vars["id"]
+	ctx := context.Background()
+
+	ctx = addStudentIdToContext(ctx, studentID)
+
 	filePath, err := f(ctx)
-
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError) // error handling can be better
 		return
@@ -35,6 +41,6 @@ func (f FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 var MuxRouter = mux.NewRouter().StrictSlash(false)
 
-func GETReport(path string, handler FileHandler) {
+func GETReport(path string, handler PdfFileHandler) {
 	MuxRouter.NewRoute().Methods("GET").Path(path).Handler(handler)
 }

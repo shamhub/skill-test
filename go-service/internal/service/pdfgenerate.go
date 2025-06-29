@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/shamhub/pdfprovider/pkg/config"
-	"github.com/shamhub/pdfprovider/types"
-
 	"github.com/shamhub/pdfprovider/internal/dao"
 	"github.com/unidoc/unipdf/v3/common/license"
 	"github.com/unidoc/unipdf/v3/creator"
@@ -84,13 +81,9 @@ var cellStyles = map[string]cellStyle{
 	},
 }
 
-func NewPdfCreator() (*creator.Creator, error) {
-	conf, err := config.NewUniDocCred()
-	if err != nil {
-		return nil, err
-	}
+func NewPdfCreator(apiKey string) (*creator.Creator, error) {
 
-	err = license.SetMeteredKey(conf.Get(types.UNIDOC_LICENSE_API_KEY))
+	err := license.SetMeteredKey(apiKey)
 	if err != nil {
 		return nil, err
 	}

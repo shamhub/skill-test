@@ -40,20 +40,20 @@ func (r *Response) GetStatus() int {
 }
 
 // Bind() takes response and binds it to i based on content-type
-func (r *Response) Bind(response []byte, i interface{}) error {
+func (r *Response) Bind(responseBody []byte, i interface{}) error {
 
 	var err error
 
 	switch getResponseContentType(r.headers) {
 	case XML:
-		err = xml.NewDecoder(bytes.NewBuffer(response)).Decode(&i)
+		err = xml.NewDecoder(bytes.NewBuffer(responseBody)).Decode(&i)
 	case TEXT:
 		v, ok := i.(*string)
 		if ok {
-			*v = string(response)
+			*v = string(responseBody)
 		}
 	case JSON:
-		err = json.NewDecoder(bytes.NewBuffer(response)).Decode(&i)
+		err = json.NewDecoder(bytes.NewBuffer(responseBody)).Decode(&i)
 	default:
 		err = errors.New("unsupported response type")
 	}

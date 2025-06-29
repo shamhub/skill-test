@@ -5,12 +5,13 @@ import (
 )
 
 type PDFHandler struct {
+	filePath           string
 	studentDataService service.IGenerateReport
 }
 
-func NewPDfHandler() *PDFHandler {
-
+func NewPDfHandler(apiKey, filePath, backendURL, backendPort string) *PDFHandler {
 	return &PDFHandler{
-		studentDataService: service.NewPDFGenerationService(),
+		studentDataService: service.NewPDFGenerationService(apiKey, filePath, backendURL, backendPort),
+		filePath:           filePath,
 	}
 }

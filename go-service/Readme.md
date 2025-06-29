@@ -1,8 +1,10 @@
 # Get started
 
 1) Copy `.env` in  `go-service/bin` folder with below details
-    - api key for accessing pdf generation api's
-    - filename with full pathname
+    - api key for accessing pdf generation api's, `UNIDOC_LICENSE_API_KEY`
+    - filename with full pathname, `FILE_PATH`
+    - node backend url, `BACKEND_URL`
+    - node backend port, `BACKEND_PORT`
 2) `cd go-service` and run `make buildwindows` to generate executable to run on windows OS
 3) `cd go-service` and run `make buildlinux` to generate executable to run on linux OS
 4) `cd go-service/bin` and run `./pdfwriter`

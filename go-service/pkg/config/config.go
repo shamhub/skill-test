@@ -1,30 +1,29 @@
 package config
 
 import (
-	"errors"
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/shamhub/pdfprovider/types"
+	"github.com/matryer/resync"
 )
 
-type UniDocConfig struct {
-	Key string
+type EnvConfig struct {
 }
 
-func NewUniDocCred() (*UniDocConfig, error) {
-	err := godotenv.Load()
-	if err != nil {
-		return nil, err
-	}
-	key := os.Getenv(types.UNIDOC_LICENSE_API_KEY)
-	if len(key) == 0 {
-		return nil, errors.New("uni doc key not found")
-	}
+var Once resync.Once
 
-	return &UniDocConfig{Key: key}, nil
+func NewEnvConfig() (envConfig *EnvConfig, err error) {
+
+	Once.Do(func() {
+		err = godotenv.Load()
+		if err != nil {
+			return
+		}
+		envConfig = &EnvConfig{}
+	})
+	return
 }
 
-func (u *UniDocConfig) Get(key string) string {
-	return u.Key
+func (u *EnvConfig) Get(key string) string {
+	return os.Getenv(key)
 }
